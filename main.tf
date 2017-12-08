@@ -4,10 +4,12 @@
 # https://www.terraform.io/docs/providers/aws/r/elasticsearch_domain.html
 # https://www.terraform.io/docs/providers/aws/r/elasticsearch_domain_policy.html
 
+data "aws_iam_policy_document" "es_management_access" {
+
+}
 resource "aws_elasticsearch_domain" "this" {
   domain_name = "${var.namespaced ? format("%s-%s", var.environment, var.name) : format("%s", var.name)}"
-
-  elasticsearch_version = "${var.elasticsearch_version}"
+  elasticsearch_version = "${var.version}"
   cluster_config {
     instance_type = "${var.instance_type}"
     # instance_count, dedicated_master_enabled, dedicated_master_type,
@@ -37,6 +39,7 @@ resource "aws_elasticsearch_domain" "this" {
 
 resource "aws_elasticsearch_domain_policy" "this" {
   domain_name = "${aws_elasticsearch_domain.this.domain_name}"
+  #access_policies = "${data.aws_iam_policy_document.es_management_access.json}"
 
   access_policies = <<POLICIES
 {

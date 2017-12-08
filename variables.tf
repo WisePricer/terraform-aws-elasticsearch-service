@@ -1,7 +1,7 @@
 // Standard Variables
 
 variable "name" {
-  description = "Name"
+  description = "Name for the Elasticsearch cluster"
 }
 variable "environment" {
   description = "Environment (ex: dev, qa, stage, prod)"
@@ -16,11 +16,11 @@ variable "tags" {
 }
 
 // Module specific Variables
-variable "elasticsearch_version" {
-  description = "Elastic Search Version"
+variable "version" {
+  description = "Elasticsearch Version"
   default     = "5.5"
 }
 variable "instance_type" {
-  description = "Instance type for Elastic Search cluster"
+  description = "Instance type for Elastic Search cluster data nodes"
   default     = "r3.large.elasticsearch"
 }
