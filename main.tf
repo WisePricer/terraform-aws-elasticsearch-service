@@ -4,15 +4,35 @@
 # https://www.terraform.io/docs/providers/aws/r/elasticsearch_domain.html
 # https://www.terraform.io/docs/providers/aws/r/elasticsearch_domain_policy.html
 
+module "enabled" {
+  source  = "devops-workflow/boolean/local"
+  version = "0.1.0"
+  value   = "${var.enabled}"
+}
+
+module "label" {
+  source        = "devops-workflow/label/local"
+  version       = "0.1.0"
+  organization  = "${var.organization}"
+  name          = "${var.name}"
+  namespace-env = "${var.namespace-env}"
+  namespace-org = "${var.namespace-org}"
+  environment   = "${var.environment}"
+  delimiter     = "${var.delimiter}"
+  attributes    = "${var.attributes}"
+  tags          = "${var.tags}"
+}
+
 resource "aws_elasticsearch_domain" "this" {
-  domain_name = "${var.namespaced ? format("%s-%s", var.environment, var.name) : format("%s", var.name)}"
+  count       = "${module.enabled.value}"
+  domain_name = "${module.label.id}"
+  #domain_name = "${var.namespaced ? format("%s-%s", var.environment, var.name) : format("%s", var.name)}"
   elasticsearch_version = "${var.version}"
   cluster_config {
     instance_type = "${var.instance_type}"
     # instance_count, dedicated_master_enabled, dedicated_master_type,
     # dedicated_master_count, zone_awareness_enabled
   }
-
   advanced_options {
     "rest.action.multi.allow_explicit_index" = "true"
   }
@@ -20,18 +40,10 @@ resource "aws_elasticsearch_domain" "this" {
   #   ebs_enabled, volume_type, volume_size, iops
   # vpc_options
   #   security_group_ids, subnet_ids
-
   snapshot_options {
     automated_snapshot_start_hour = 23
   }
-
-  tags = "${ merge(
-    var.tags,
-    map("Name", var.namespaced ?
-     format("%s-%s", var.environment, var.name) :
-     format("%s", var.name) ),
-    map("Environment", var.environment),
-    map("Terraform", "true") )}"
+  tags = "${module.label.tags}"
 }
 
 /*
@@ -49,6 +61,7 @@ data "aws_iam_policy_document" "es_management_access" {
 }
 */
 resource "aws_elasticsearch_domain_policy" "this" {
+  count       = "${module.enabled.value}"
   domain_name = "${aws_elasticsearch_domain.this.domain_name}"
   #access_policies = "${data.aws_iam_policy_document.es_management_access.json}"
 
