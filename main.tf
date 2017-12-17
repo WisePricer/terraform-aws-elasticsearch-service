@@ -24,22 +24,37 @@ module "label" {
 }
 
 resource "aws_elasticsearch_domain" "this" {
-  count       = "${module.enabled.value}"
-  domain_name = "${module.label.id}"
+  count                 = "${module.enabled.value}"
+  domain_name           = "${module.label.id}"
   #domain_name = "${var.namespaced ? format("%s-%s", var.environment, var.name) : format("%s", var.name)}"
   elasticsearch_version = "${var.version}"
   cluster_config {
-    instance_type = "${var.instance_type}"
-    # instance_count, dedicated_master_enabled, dedicated_master_type,
-    # dedicated_master_count, zone_awareness_enabled
+    instance_type             = "${var.instance_type}"
+    /*
+    instance_count            =
+    dedicated_master_enabled  =
+    dedicated_master_type     =
+    dedicated_master_count    =
+    zone_awareness_enabled    =
+    */
   }
   advanced_options {
     "rest.action.multi.allow_explicit_index" = "true"
   }
-  # ebs_options
-  #   ebs_enabled, volume_type, volume_size, iops
-  # vpc_options
-  #   security_group_ids, subnet_ids
+  /*
+  ebs_options {
+    ebs_enabled =
+    volume_type =
+    volume_size =
+    iops        =
+  }
+  */
+  /*
+  vpc_options {
+    security_group_ids  =
+    subnet_ids          =
+  }
+  */
   snapshot_options {
     automated_snapshot_start_hour = 23
   }
