@@ -6,13 +6,13 @@
 
 module "enabled" {
   source  = "devops-workflow/boolean/local"
-  version = "0.1.0"
+  version = "0.1.1"
   value   = "${var.enabled}"
 }
 
 module "label" {
   source        = "devops-workflow/label/local"
-  version       = "0.1.0"
+  version       = "0.1.3"
   organization  = "${var.organization}"
   name          = "${var.name}"
   namespace-env = "${var.namespace-env}"
