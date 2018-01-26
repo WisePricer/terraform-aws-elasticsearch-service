@@ -20,6 +20,10 @@ output "endpoint" {
   description = "Endpoint of Elasticsearch Domain"
   value       = "${aws_elasticsearch_domain.this.endpoint}"
 }
+output "kibana_endpoint" {
+  description = "Endpoint of Kibana without https scheme"
+  value       = "${aws_elasticsearch_domain.this.kibana_endpoint}"
+}
 output "vpc_id" {
   description = "VPC ID of Elasticsearch Domain"
   value       = "${aws_elasticsearch_domain.this.vpc_options.0.vpc_id}"

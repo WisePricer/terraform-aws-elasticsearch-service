@@ -50,6 +50,13 @@ resource "aws_elasticsearch_domain" "this" {
   }
   */
   /*
+  log_publishing_options {
+    enabled   =
+    log_type  =
+    cloudwatch_log_group_arn  =
+  }
+  */
+  /*
   vpc_options {
     security_group_ids  =
     subnet_ids          =
